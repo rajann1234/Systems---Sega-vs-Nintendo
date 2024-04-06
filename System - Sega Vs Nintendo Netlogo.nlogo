@@ -6,6 +6,7 @@ globals [
   %no-company
   %company-a
   %company-b
+  market-increase-counter
 ]
 
 
@@ -14,6 +15,7 @@ to setup
   create-advertisement-patches
   add-consumers
   reset-ticks
+  set market-increase-counter 0
 end
 
 to go
@@ -22,6 +24,7 @@ to go
   adoption-from-wom
   exit-market
   update-global-variables
+  market-growth
   tick
 end
 
@@ -106,6 +109,24 @@ to exit-market ;so not all agents are in either one camp
   ]
 end
 
+to increase-market
+  let growth (250 - count consumers) * 0.05
+  create-consumers growth [
+    setxy random-xcor random-ycor
+    set shape "person"
+    set size 2
+    set color grey
+    set company 0
+  ]
+end
+
+to market-growth
+  set market-increase-counter market-increase-counter + 1
+  if market-increase-counter mod 100 = 0[
+    increase-market
+  ]
+end
+
 to update-global-variables ;for plotting
   set %no-company count consumers with [company = 0] / count consumers * 100
   set %company-a count consumers with [company = 1] / count consumers * 100
@@ -148,7 +169,7 @@ advertisement-for-company-a
 advertisement-for-company-a
 0
 30
-14.0
+26.0
 1
 1
 NIL
@@ -180,7 +201,7 @@ advertisement-for-company-b
 advertisement-for-company-b
 0
 30
-30.0
+10.0
 1
 1
 NIL
@@ -195,7 +216,7 @@ quality-for-company-a
 quality-for-company-a
 1
 10
-5.0
+2.0
 1
 1
 NIL
@@ -210,7 +231,7 @@ price-for-company-a
 price-for-company-a
 1
 10
-7.0
+6.0
 1
 1
 NIL
@@ -225,7 +246,7 @@ quality-for-company-b
 quality-for-company-b
 1
 10
-5.0
+3.0
 1
 1
 NIL
@@ -240,7 +261,7 @@ price-for-company-b
 price-for-company-b
 1
 10
-4.0
+5.0
 1
 1
 NIL
